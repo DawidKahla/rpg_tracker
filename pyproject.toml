@@ -8,7 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 Kivy = "2.3.0"
-kivymd = "1.2.0"
+kivymd = "2.0.1.dev0"
 SQLAlchemy = "^2.0.36"
 
 
@@ -16,6 +16,8 @@ SQLAlchemy = "^2.0.36"
 pytest = "^8.3.3"
 flake8 = "^7.1.1"
 mypy = "^1.13.0"
+kivy = "^2.3.0"
+pytest-kivy = "^0.1.0.dev2"
 
 [build-system]
 requires = ["poetry-core"]
