@@ -10,7 +10,6 @@ python = "^3.12"
 Kivy = "2.3.0"
 kivymd = "1.2.0"
 SQLAlchemy = "^2.0.36"
-pytest = "^8.3.3"
 
 
 [tool.poetry.group.dev.dependencies]
