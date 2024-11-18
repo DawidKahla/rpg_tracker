@@ -7,6 +7,7 @@ class Campaign(Base):
     __tablename__ = "campaigns"
 
     id = Column(Integer, primary_key=True, index=True)
+    icon = Column(String, default="dice-d20-outline")
     name = Column(String, index=True, nullable=False)
     system = Column(String, nullable=False)
     start_date = Column(Date)
@@ -32,6 +33,7 @@ class Hero(Base):
     __tablename__ = "heroes"
 
     id = Column(Integer, primary_key=True, index=True)
+    icon = Column(String, nullable=True)
     campaign_id = Column(Integer, ForeignKey("campaigns.id"))
     name = Column(String, nullable=False)
     status = Column(String, default="active")

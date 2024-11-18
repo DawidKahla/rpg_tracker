@@ -4,17 +4,17 @@ from kivymd.uix.list import (
     MDListItem,
     MDListItemHeadlineText,
     MDListItemSupportingText,
-    MDListItemLeadingIcon,
 )
 from kivymd.uix.scrollview import MDScrollView
 from database.db_setup import SessionLocal
-from database.models import Campaign
+from database.models import Session
 
 
-class CampaignScreen(MDScreen):
+class CalendarScreen(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.session = SessionLocal()
+        self.selected_campaign_id = None
         self.build_ui()
 
     def build_ui(self):
@@ -24,19 +24,24 @@ class CampaignScreen(MDScreen):
         self.add_widget(scroll_view)
 
     def on_enter(self):
-        self.populate_campaign_list()
+        if self.selected_campaign_id is not None:
+            self.get_sessions(self.selected_campaign_id)
 
-    def populate_campaign_list(self):
+    def get_sessions(self, campaign_id):
         self.list_view.clear_widgets()
 
-        campaigns = self.session.query(Campaign).all()
+        sessions = self.session.query(Session).filter(
+            Session.campaign_id == campaign_id
+        )
 
-        for campaign in campaigns:
+        for session in sessions:
+
             item = MDListItem(
-                MDListItemLeadingIcon(icon=campaign.icon),
-                MDListItemHeadlineText(text=campaign.name),
-                MDListItemSupportingText(text=f"System: {campaign.system}"),
-                MDListItemSupportingText(text=f"Start: {campaign.start_date}"),
-                on_release=lambda x, c=campaign: self.open_calendar(c.id),
+                MDListItemHeadlineText(text=session.title),
+                MDListItemSupportingText(text=str(session.session_date)),
+                on_release=lambda x, s=session: self.open_campaign(s),
             )
             self.list_view.add_widget(item)
+
+    def open_campaign(self, session):
+        print(f"Opening session: {session.title}")
