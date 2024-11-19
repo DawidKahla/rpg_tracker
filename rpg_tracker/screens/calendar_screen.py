@@ -5,27 +5,55 @@ from kivymd.uix.list import (
     MDListItemHeadlineText,
     MDListItemSupportingText,
 )
+from kivymd.uix.button import MDIconButton
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.label import MDLabel
 from kivymd.uix.scrollview import MDScrollView
 from database.db_setup import SessionLocal
 from database.models import Session
 
 
 class CalendarScreen(MDScreen):
-    def __init__(self, **kwargs):
+    def __init__(self, navigation=None, **kwargs):
         super().__init__(**kwargs)
         self.session = SessionLocal()
-        self.selected_campaign_id = None
+        self.navigation = navigation
         self.build_ui()
 
     def build_ui(self):
         scroll_view = MDScrollView()
         self.list_view = MDList()
         scroll_view.add_widget(self.list_view)
-        self.add_widget(scroll_view)
+        layout = MDBoxLayout(orientation="vertical")
+
+        nav_bar = MDBoxLayout(
+            orientation="horizontal",
+            size_hint_y=None,
+            height=50,
+            md_bg_color=self.theme_cls.primaryColor,
+        )
+        back_button = MDIconButton(
+            icon="arrow-left", on_release=self.go_back, icon_color="green"
+        )
+        title = MDLabel(
+            text="Calendar",
+            halign="left",
+            theme_text_color="Custom",
+            text_color=(1, 1, 1, 1),
+        )
+        nav_bar.add_widget(back_button)
+        nav_bar.add_widget(title)
+
+        layout.add_widget(nav_bar)
+        layout.add_widget(scroll_view)
+        self.add_widget(layout)
 
     def on_enter(self):
-        if self.selected_campaign_id is not None:
-            self.get_sessions(self.selected_campaign_id)
+        if self.navigation:
+            campaign_id = self.navigation.get_campaign()
+            self.get_sessions(campaign_id)
+        else:
+            print("No campaign selected")
 
     def get_sessions(self, campaign_id):
         self.list_view.clear_widgets()
@@ -39,9 +67,20 @@ class CalendarScreen(MDScreen):
             item = MDListItem(
                 MDListItemHeadlineText(text=session.title),
                 MDListItemSupportingText(text=str(session.session_date)),
-                on_release=lambda x, s=session: self.open_campaign(s),
+                on_release=lambda x, s=session: self.open_session(s),
             )
             self.list_view.add_widget(item)
 
-    def open_campaign(self, session):
-        print(f"Opening session: {session.title}")
+    def open_session(self, session_id):
+        print(f"Fetching session: {session_id}")
+        # if self.navigation:
+        #     self.navigation.set_campaign(campaign_id)
+        #     self.navigation.switch_to_screen("calendar_screen")
+        # else:
+        #     raise ValueError("Navigation manager is not set!")
+
+    def go_back(self, *args):
+        """
+        Funkcja do przełączania ekranu na listę kampanii.
+        """
+        self.navigation.switch_to_screen("campaign_screen")

@@ -3,6 +3,7 @@ from kivymd.uix.screenmanager import MDScreenManager
 from screens.campaigns_screen import CampaignScreen
 from screens.calendar_screen import CalendarScreen
 from database.db_setup import init_db
+from navigation_manager import NavigationManager
 
 
 class RPGTrackerApp(MDApp):
@@ -11,19 +12,17 @@ class RPGTrackerApp(MDApp):
         self.theme_cls.primary_palette = "Blue"
 
         init_db()
+        self.navigation_manager = NavigationManager()
 
-        self.screen_manager = MDScreenManager()
-        self.campaign_screen = CampaignScreen(name="campaign_list")
-        self.calendar_screen = CalendarScreen(name="calendar_screen")
+        # Rejestrujemy ekrany
+        self.navigation_manager.add_widget(
+            CampaignScreen(name="campaign_screen", navigation=self.navigation_manager)
+        )
+        self.navigation_manager.add_widget(
+            CalendarScreen(name="calendar_screen", navigation=self.navigation_manager)
+        )
 
-        # Przechodzenie między ekranami
-        self.screen_manager.add_widget(self.campaign_screen)
-        self.screen_manager.add_widget(self.calendar_screen)
-
-        # Przekazanie referencji do metod nawigacji
-        self.campaign_screen.open_calendar = self.open_calendar
-
-        return self.screen_manager
+        return self.navigation_manager
 
     def open_calendar(self, campaign_id):
         # Przekazanie campaign_id do calendar_screen

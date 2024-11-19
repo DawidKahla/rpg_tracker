@@ -12,9 +12,10 @@ from database.models import Campaign
 
 
 class CampaignScreen(MDScreen):
-    def __init__(self, **kwargs):
+    def __init__(self, navigation=None, **kwargs):
         super().__init__(**kwargs)
         self.session = SessionLocal()
+        self.navigation = navigation
         self.build_ui()
 
     def build_ui(self):
@@ -40,3 +41,10 @@ class CampaignScreen(MDScreen):
                 on_release=lambda x, c=campaign: self.open_calendar(c.id),
             )
             self.list_view.add_widget(item)
+
+    def open_calendar(self, campaign_id):
+        if self.navigation:
+            self.navigation.set_campaign(campaign_id)
+            self.navigation.switch_to_screen("calendar_screen")
+        else:
+            raise ValueError("Navigation manager is not set!")
