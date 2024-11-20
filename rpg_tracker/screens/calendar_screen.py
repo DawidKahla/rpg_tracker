@@ -73,14 +73,6 @@ class CalendarScreen(MDScreen):
 
     def open_session(self, session_id):
         print(f"Fetching session: {session_id}")
-        # if self.navigation:
-        #     self.navigation.set_campaign(campaign_id)
-        #     self.navigation.switch_to_screen("calendar_screen")
-        # else:
-        #     raise ValueError("Navigation manager is not set!")
 
     def go_back(self, *args):
-        """
-        Funkcja do przełączania ekranu na listę kampanii.
-        """
         self.navigation.switch_to_screen("campaign_screen")

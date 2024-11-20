@@ -1,5 +1,4 @@
 from kivymd.app import MDApp
-from kivymd.uix.screenmanager import MDScreenManager
 from screens.campaigns_screen import CampaignScreen
 from screens.calendar_screen import CalendarScreen
 from database.db_setup import init_db
