@@ -44,4 +44,8 @@ jobs:
       - run: poetry install --no-interaction
 
       - name: Run Tests
+        run: |
+          echo "Poetry executable: $(which pytest)"
+          echo "Python executable: $(which python)"
+          echo "Poetry virtualenv: $(poetry env info --path)"
         run: poetry run pytest
