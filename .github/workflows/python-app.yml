@@ -4,27 +4,36 @@ on:
   push:
     branches:
       - main
-      - dev
   pull_request:
-    branches:
-      - main
-      - dev
+
+
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.12
         uses: actions/setup-python@v2
         with:
           python-version: '3.12'
-      - name: Install dependencies
+
+      - name: Install Poetry
         run: |
-          poetry install --no-interaction
+          curl -sSL https://install.python-poetry.org | python3 -
+
+      - name: Add Poetry to PATH
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: poetry install --no-interaction
+
       - name: Run Flake8
         run: |
           poetry run flake8 .
+          
       - name: Run Black
         run: |
           poetry run black --check .
