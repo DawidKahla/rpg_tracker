@@ -29,19 +29,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          poetry install
-
-      - name: Show installed dependencies
-        run: poetry show
-      
-      - name: Verify pytest is installed
-        run: poetry run pytest --version
-      
-      - name: Debug virtual environment
-        run: |
-          echo "Python executable: $(which python)"
-          echo "Poetry executable: $(which poetry)"
-          echo "Pytest executable: $(which pytest)"
+          poetry install --no-interaction
 
       - name: Run tests
         run: |
