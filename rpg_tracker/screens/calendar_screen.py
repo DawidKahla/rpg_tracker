@@ -10,7 +10,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.scrollview import MDScrollView
 from rpg_tracker.database.db_setup import SessionLocal
-from rpg_tracker.database.models import Session
+from rpg_tracker.database.models import Session, Campaign
 
 
 class CalendarScreen(MDScreen):
@@ -25,26 +25,14 @@ class CalendarScreen(MDScreen):
         self.list_view = MDList()
         scroll_view.add_widget(self.list_view)
         layout = MDBoxLayout(orientation="vertical")
-
-        nav_bar = MDBoxLayout(
-            orientation="horizontal",
-            size_hint_y=None,
-            height=50,
-            md_bg_color=self.theme_cls.primaryColor,
+        self.nav_bar = MDBoxLayout(
+            orientation="horizontal", size_hint_y=None, height=50
         )
-        back_button = MDIconButton(
-            icon="arrow-left", on_release=self.go_back, icon_color="green"
-        )
-        title = MDLabel(
-            text="Calendar",
-            halign="left",
-            theme_text_color="Custom",
-            text_color=(1, 1, 1, 1),
-        )
-        nav_bar.add_widget(back_button)
-        nav_bar.add_widget(title)
-
-        layout.add_widget(nav_bar)
+        back_button = MDIconButton(icon="arrow-left", on_release=self.go_back)
+        self.nav_bar.add_widget(back_button)
+        self.title = MDLabel(text="default", halign="left")
+        self.nav_bar.add_widget(self.title)
+        layout.add_widget(self.nav_bar)
         layout.add_widget(scroll_view)
         self.add_widget(layout)
 
@@ -57,6 +45,7 @@ class CalendarScreen(MDScreen):
 
     def get_sessions(self, campaign_id):
         self.list_view.clear_widgets()
+        self.nav_bar.remove_widget(self.title)
 
         sessions = self.session.query(Session).filter(
             Session.campaign_id == campaign_id
@@ -70,6 +59,9 @@ class CalendarScreen(MDScreen):
                 on_release=lambda x, s=session: self.open_session(s),
             )
             self.list_view.add_widget(item)
+        title = self.session.query(Campaign).filter(Campaign.id == campaign_id)[0].name
+        self.title = MDLabel(text=title, halign="center")
+        self.nav_bar.add_widget(self.title)
 
     def open_session(self, session_id):
         print(f"Fetching session: {session_id}")

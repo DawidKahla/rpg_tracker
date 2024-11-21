@@ -8,7 +8,7 @@ from kivymd.uix.list import (
 )
 from kivymd.uix.scrollview import MDScrollView
 from rpg_tracker.database.db_setup import SessionLocal
-from rpg_tracker.database.models import Campaign  # do not use there direct
+from rpg_tracker.database.models import Campaign
 
 
 class CampaignScreen(MDScreen):
@@ -23,6 +23,9 @@ class CampaignScreen(MDScreen):
         self.list_view = MDList()
         scroll_view.add_widget(self.list_view)
         self.add_widget(scroll_view)
+        print(self.children[0])
+        print(self.children)
+        print(len(self.children))
 
     def on_enter(self):
         self.populate_campaign_list()

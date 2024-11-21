@@ -2,8 +2,7 @@ import unittest
 from unittest.mock import MagicMock, patch
 from kivymd.app import MDApp
 from rpg_tracker.screens.calendar_screen import CalendarScreen
-from rpg_tracker.database.models import Session  # noqa: F401
-from kivymd.uix.list import MDList, MDListItem  # noqa: F401
+from kivymd.uix.list import MDList
 
 
 class TestApp(MDApp):
@@ -46,7 +45,6 @@ class TestCalendarScreen(unittest.TestCase):
         self.assertEqual(len(screen.list_view.children), 0)
 
     def test_on_enter_with_navigation(self):
-        """Testuje, czy `on_enter` poprawnie wywołuje `get_sessions`."""
         self.mock_navigation.get_campaign.return_value = 1
         self.screen.get_sessions = MagicMock()
 
@@ -56,19 +54,16 @@ class TestCalendarScreen(unittest.TestCase):
         self.screen.get_sessions.assert_called_once_with(1)
 
     def test_on_enter_without_navigation(self):
-        """Testuje, czy `on_enter` obsługuje brak nawigacji."""
         self.screen.navigation = None
         with patch("builtins.print") as mock_print:
             self.screen.on_enter()
             mock_print.assert_called_with("No campaign selected")
 
     def test_go_back(self):
-        """Testuje działanie przycisku powrotu."""
         self.screen.go_back()
         self.mock_navigation.switch_to_screen.assert_called_once_with("campaign_screen")
 
     def test_open_session(self):
-        """Testuje działanie metody `open_session`."""
         with patch("builtins.print") as mock_print:
             self.screen.open_session(23)
             mock_print.assert_called_once_with("Fetching session: 23")
