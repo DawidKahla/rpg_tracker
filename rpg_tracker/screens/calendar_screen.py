@@ -1,6 +1,7 @@
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.list import (
     MDList,
+    MDListItem,
     MDListItemHeadlineText,
     MDListItemSupportingText,
 )
@@ -9,6 +10,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.scrollview import MDScrollView
 from rpg_tracker.database.db_setup import SessionLocal
+from rpg_tracker.database.models import Session
 
 
 class CalendarScreen(MDScreen):
