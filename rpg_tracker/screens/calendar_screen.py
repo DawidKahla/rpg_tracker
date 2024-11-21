@@ -9,8 +9,8 @@ from kivymd.uix.button import MDIconButton
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.scrollview import MDScrollView
-from database.db_setup import SessionLocal
-from database.models import Session
+from rpg_tracker.database.db_setup import SessionLocal
+from rpg_tracker.database.models import Session
 
 
 class CalendarScreen(MDScreen):

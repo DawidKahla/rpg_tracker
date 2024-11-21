@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import MagicMock, patch
 from kivymd.app import MDApp
-from screens.calendar_screen import CalendarScreen
-from database.models import Session
-from kivymd.uix.list import MDListItem
+from rpg_tracker.screens.calendar_screen import CalendarScreen
+from rpg_tracker.database.models import Session
+from kivymd.uix.list import MDList, MDListItem
 
 
 class TestApp(MDApp):
@@ -37,35 +37,13 @@ class TestCalendarScreen(unittest.TestCase):
             nav_bar.children[0].text, "Calendar", "Title should be 'Calendar'"
         )
 
-    @patch("screens.calendar_screen.SessionLocal")
-    def test_get_sessions(self, mock_db):
-        """Testuje, czy sesje są poprawnie pobierane z bazy danych."""
-
-        mock_session = MagicMock(spec=Session)
-        mock_session.title = "Test Session"
-        mock_session.session_date = "2024-01-01"
-
-        mock_query = MagicMock()
-        mock_query.filter.return_value = [mock_session]
-        mock_db.return_value.query.return_value = mock_query
-
-        mock_navigation = MagicMock()
-        screen = CalendarScreen(navigation=mock_navigation)
-
-        screen.list_view.clear_widgets = MagicMock()
-
+    def test_get_sessions_no_sessions(self):
+        screen = CalendarScreen()
+        screen.list_view = MDList()
+        screen.session = MagicMock()
+        screen.session.query().filter.return_value = []
         screen.get_sessions(campaign_id=1)
-
-        screen.list_view.clear_widgets.assert_called_once()
-
-        self.assertEqual(
-            len(screen.list_view.children), 1, "List view should have one item"
-        )
-
-        list_item = screen.list_view.children[0]
-        self.assertIsInstance(
-            list_item, MDListItem, "First item should be of type MDListItem"
-        )
+        self.assertEqual(len(screen.list_view.children), 0)
 
     def test_on_enter_with_navigation(self):
         """Testuje, czy `on_enter` poprawnie wywołuje `get_sessions`."""

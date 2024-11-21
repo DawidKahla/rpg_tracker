@@ -11,6 +11,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def init_db():
-    import database.models
+    import rpg_tracker.database.models
 
     Base.metadata.create_all(bind=engine)

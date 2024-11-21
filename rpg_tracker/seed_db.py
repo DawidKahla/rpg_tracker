@@ -1,6 +1,6 @@
 from datetime import date
-from database.db_setup import SessionLocal, init_db
-from database.models import Campaign, Session
+from rpg_tracker.database.db_setup import SessionLocal, init_db
+from rpg_tracker.database.models import Campaign, Session
 
 # Inicjalizacja bazy danych
 init_db()

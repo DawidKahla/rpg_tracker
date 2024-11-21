@@ -1,8 +1,8 @@
 from kivymd.app import MDApp
 from screens.campaigns_screen import CampaignScreen
 from screens.calendar_screen import CalendarScreen
-from database.db_setup import init_db
-from navigation_manager import NavigationManager
+from rpg_tracker.database.db_setup import init_db
+from rpg_tracker.navigation_manager import NavigationManager
 
 
 class RPGTrackerApp(MDApp):

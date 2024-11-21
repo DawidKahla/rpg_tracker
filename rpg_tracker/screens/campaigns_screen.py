@@ -7,8 +7,8 @@ from kivymd.uix.list import (
     MDListItemLeadingIcon,
 )
 from kivymd.uix.scrollview import MDScrollView
-from database.db_setup import SessionLocal
-from database.models import Campaign
+from rpg_tracker.database.db_setup import SessionLocal
+from rpg_tracker.database.models import Campaign  # do not use there direct
 
 
 class CampaignScreen(MDScreen):
