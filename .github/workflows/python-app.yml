@@ -31,10 +31,18 @@ jobs:
         run: |
           poetry install
 
-      - name: Check dependencies
+      - name: Show installed dependencies
+        run: poetry show
+      
+      - name: Verify pytest is installed
+        run: poetry run pytest --version
+      
+      - name: Debug virtual environment
         run: |
-          poetry show
-                
+          echo "Python executable: $(which python)"
+          echo "Poetry executable: $(which poetry)"
+          echo "Pytest executable: $(which pytest)"
+
       - name: Run tests
         run: |
-          poetry run pytest --collect-only -v
+          poetry run pytest 
