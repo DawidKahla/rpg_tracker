@@ -30,6 +30,5 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction
 
-      - name: Run Black
-        run: |
-          poetry run black --check .
+      - name: Run flake8 (check style)
+        run: poetry run flake8 .

@@ -2,8 +2,8 @@ import unittest
 from unittest.mock import MagicMock, patch
 from kivymd.app import MDApp
 from rpg_tracker.screens.calendar_screen import CalendarScreen
-from rpg_tracker.database.models import Session
-from kivymd.uix.list import MDList, MDListItem
+from rpg_tracker.database.models import Session  # noqa: F401
+from kivymd.uix.list import MDList, MDListItem  # noqa: F401
 
 
 class TestApp(MDApp):
