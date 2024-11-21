@@ -31,6 +31,10 @@ jobs:
         run: |
           poetry install
 
+      - name: Check dependencies
+        run: |
+          poetry show
+                
       - name: Run tests
         run: |
           poetry run pytest --collect-only -v
