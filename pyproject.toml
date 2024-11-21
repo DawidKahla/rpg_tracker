@@ -11,7 +11,6 @@ Kivy = "2.3.0"
 kivymd = "2.0.1.dev0"
 SQLAlchemy = "^2.0.36"
 
-
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
 flake8 = "^7.1.1"
@@ -22,3 +21,9 @@ pytest-kivy = "^0.1.0.dev2"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
