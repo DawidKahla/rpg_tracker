@@ -33,4 +33,5 @@ jobs:
 
       - name: Run tests
         run: |
+          source $(poetry env info -p)/bin/activate
           poetry run pytest 
