@@ -48,4 +48,4 @@ jobs:
           echo "Poetry executable: $(which pytest)"
           echo "Python executable: $(which python)"
           echo "Poetry virtualenv: $(poetry env info --path)"
-        run: poetry run pytest
+          poetry run pytest
