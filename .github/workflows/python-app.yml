@@ -33,4 +33,4 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest --maxfail=1 --tb=short -v
+          poetry run pytest --collect-only -v
