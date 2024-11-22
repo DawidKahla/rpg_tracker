@@ -13,7 +13,6 @@ class RPGTrackerApp(MDApp):
         init_db()
         self.navigation_manager = NavigationManager()
 
-        # Rejestrujemy ekrany
         self.navigation_manager.add_widget(
             CampaignScreen(name="campaign_screen", navigation=self.navigation_manager)
         )
@@ -24,7 +23,6 @@ class RPGTrackerApp(MDApp):
         return self.navigation_manager
 
     def open_calendar(self, campaign_id):
-        # Przekazanie campaign_id do calendar_screen
         self.calendar_screen.selected_campaign_id = campaign_id
         self.screen_manager.current = "calendar_screen"
 

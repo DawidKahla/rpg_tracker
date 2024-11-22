@@ -30,10 +30,12 @@ class TestCalendarScreen(unittest.TestCase):
     def test_build_ui(self):
         nav_bar = self.screen.children[0].children[1]
         self.assertEqual(
-            len(nav_bar.children), 2, "Nav bar should have back button and title"
+            len(nav_bar.children),
+            3,
+            "Nav bar should have back button, add button and title",
         )
         self.assertEqual(
-            nav_bar.children[0].text, "Calendar", "Title should be 'Calendar'"
+            nav_bar.children[1].children[0].text, "default", "Title should be 'default'"
         )
 
     def test_get_sessions_no_sessions(self):

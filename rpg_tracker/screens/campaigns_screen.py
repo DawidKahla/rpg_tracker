@@ -23,9 +23,6 @@ class CampaignScreen(MDScreen):
         self.list_view = MDList()
         scroll_view.add_widget(self.list_view)
         self.add_widget(scroll_view)
-        print(self.children[0])
-        print(self.children)
-        print(len(self.children))
 
     def on_enter(self):
         self.populate_campaign_list()
