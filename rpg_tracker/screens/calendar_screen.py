@@ -87,4 +87,4 @@ class CalendarScreen(MDScreen):
         self.navigation.switch_to_screen("campaign_screen")
 
     def add_session(self, *args):
-        print("add session")
+        self.navigation.switch_to_screen("add_session_screen")
