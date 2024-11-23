@@ -15,6 +15,7 @@ class AddSessionScreen(MDScreen):
         self.session = SessionLocal()
         self.navigation = navigation
         self.selected_date = None
+        self.date_button = None
         self.build_ui()
 
     def build_ui(self, *args):
@@ -33,35 +34,41 @@ class AddSessionScreen(MDScreen):
         # Input fields
         self.title_input = MDTextField(
             MDTextFieldHintText(text="Title (optional)"),
-            size_hint_x=0.9,
+            size_hint_x=0.8,
             pos_hint={"center_x": 0.5},
         )
         layout.add_widget(self.title_input)
 
         self.notes_input = MDTextField(
             MDTextFieldHintText(text="Notes (optional)"),
-            size_hint_x=0.9,
+            size_hint_x=0.8,
             pos_hint={"center_x": 0.5},
             multiline=True,
         )
         layout.add_widget(self.notes_input)
 
-        date_picker_button = MDButton(
+        self.date_button = MDButton(
             MDButtonText(text="Select Date"),
-            size_hint_x=0.5,
+            size_hint_x=0.8,
             pos_hint={"center_x": 0.5},
             on_release=self.open_date_picker,
         )
-        layout.add_widget(date_picker_button)
 
         save_button = MDButton(
             MDButtonText(text="Save Session"),
-            size_hint_x=0.5,
-            pos_hint={"center_x": 0.5},
+            pos_hint={"center_x": 0.8},
             on_release=self.save_session,
         )
-        layout.add_widget(save_button)
+        button_layout = MDBoxLayout(
+            height=50,
+            spacing=20,
+            size_hint_x=1,
+            pos_hint={"center_x": 0.9},
+        )
+        layout.add_widget(self.date_button)
+        button_layout.add_widget(save_button)
 
+        self.add_widget(button_layout)
         self.add_widget(layout)
 
     def on_enter(self):
@@ -76,7 +83,6 @@ class AddSessionScreen(MDScreen):
             self.title_label.text = f"Add Session to {campaign_name}"
 
     def go_back(self, *args):
-        self.clear_inputs()
         self.navigation.switch_to_screen("calendar_screen")
 
     def open_date_picker(self, *args):
@@ -86,7 +92,7 @@ class AddSessionScreen(MDScreen):
 
     def on_ok(self, instance_date_picker):
         self.selected_date = instance_date_picker.get_date()[0]
-        print(f"Wybrano datę: {self.selected_date}")
+        self.date_button.children[0].text = f"Selected Date: {self.selected_date}"
         instance_date_picker.dismiss()
 
     def save_session(self, *args):
@@ -103,10 +109,10 @@ class AddSessionScreen(MDScreen):
         )
         self.session.add(session)
         self.session.commit()
-        self.clear_inputs()
         self.navigation.switch_to_screen("calendar_screen")
 
-    def clear_inputs(self, *args):
+    def on_leave(self, *args):
         self.title_input.text = ""
         self.notes_input.text = ""
         self.selected_date = None
+        self.date_button.children[0].text = "Select Date"
