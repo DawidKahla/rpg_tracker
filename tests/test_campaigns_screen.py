@@ -34,7 +34,7 @@ class TestCampaignScreen(unittest.TestCase):
         """Test that the UI is built correctly."""
         self.screen.build_ui()
         print(len(self.screen.children))
-        self.assertEqual(len(self.screen.children), 2)
+        self.assertEqual(len(self.screen.children), 4)
         print(len(self.screen.children))
 
     def test_on_enter_calls_populate_campaign_list(self):

@@ -101,7 +101,7 @@ class AddSessionScreen(MDScreen):
         session = Session(
             campaign_id=campaign_id,
             session_date=self.selected_date,
-            title=self.title_input.text or f"Session {self.selected_date}",
+            title=self.title_input.text or "Unnamed Session",
             notes=self.notes_input.text or None,
         )
         self.session.add(session)

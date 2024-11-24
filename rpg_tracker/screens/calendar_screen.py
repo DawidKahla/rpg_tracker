@@ -98,7 +98,7 @@ class CalendarScreen(MDScreen):
 
             item_layout.add_widget(text_layout)
             open_button = MDIconButton(
-                icon="file-eye", on_release=lambda x, s=session: self.open_session(s)
+                icon="file-edit", on_release=lambda x, s=session: self.open_session(s)
             )
             item_layout.add_widget(open_button)
 
