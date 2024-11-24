@@ -7,6 +7,7 @@ from kivymd.uix.label import MDLabel
 from rpg_tracker.database.db_setup import SessionLocal
 from rpg_tracker.database.models import Session, Campaign
 from kivymd.uix.gridlayout import MDGridLayout
+from datetime import date
 
 
 class AddSessionScreen(MDScreen):
@@ -14,7 +15,7 @@ class AddSessionScreen(MDScreen):
         super().__init__(**kwargs)
         self.session = SessionLocal()
         self.navigation = navigation
-        self.selected_date = None
+        self.selected_date = date.today()
         self.date_button = None
         self.build_ui()
 
@@ -96,15 +97,11 @@ class AddSessionScreen(MDScreen):
         instance_date_picker.dismiss()
 
     def save_session(self, *args):
-        if not self.selected_date:
-            print("Date is required.")
-            return
-
         campaign_id = self.navigation.get_campaign()
         session = Session(
             campaign_id=campaign_id,
             session_date=self.selected_date,
-            title=self.title_input.text or None,
+            title=self.title_input.text or f"Session {self.selected_date}",
             notes=self.notes_input.text or None,
         )
         self.session.add(session)
@@ -114,5 +111,5 @@ class AddSessionScreen(MDScreen):
     def on_leave(self, *args):
         self.title_input.text = ""
         self.notes_input.text = ""
-        self.selected_date = None
+        self.selected_date = date.today()
         self.date_button.children[0].text = "Select Date"

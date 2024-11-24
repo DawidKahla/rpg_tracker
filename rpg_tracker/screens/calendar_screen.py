@@ -1,11 +1,6 @@
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.list import (
-    MDList,
-    MDListItem,
-    MDListItemHeadlineText,
-    MDListItemSupportingText,
-)
-from kivymd.uix.button import MDIconButton, MDFabButton
+from kivymd.uix.list import MDList
+from kivymd.uix.button import MDIconButton, MDFabButton, MDButtonText, MDButton
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.scrollview import MDScrollView
@@ -13,6 +8,8 @@ from rpg_tracker.database.db_setup import SessionLocal
 from rpg_tracker.database.models import Session, Campaign
 from kivymd.uix.anchorlayout import MDAnchorLayout
 from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogButtonContainer
+from kivy.uix.widget import Widget
 
 
 class CalendarScreen(MDScreen):
@@ -33,6 +30,7 @@ class CalendarScreen(MDScreen):
             },
         ]
         self.menu = MDDropdownMenu(items=self.menu_items)
+        self.dialog = None
         self.build_ui()
 
     def build_ui(self):
@@ -88,17 +86,67 @@ class CalendarScreen(MDScreen):
         )
 
         for session in sessions:
-            item = MDListItem(
-                MDListItemHeadlineText(text=session.title),
-                MDListItemSupportingText(text=str(session.session_date)),
-                on_release=lambda x, s=session: self.open_session(s),
+            item_layout = MDBoxLayout(
+                orientation="horizontal", size_hint_y=None, height=50
             )
-            self.list_view.add_widget(item)
+
+            text_layout = MDBoxLayout(orientation="vertical")
+            text_layout.add_widget(MDLabel(text=session.title))
+            text_layout.add_widget(
+                MDLabel(text=str(session.session_date), theme_text_color="Secondary")
+            )
+
+            item_layout.add_widget(text_layout)
+            open_button = MDIconButton(
+                icon="file-eye", on_release=lambda x, s=session: self.open_session(s)
+            )
+            item_layout.add_widget(open_button)
+
+            delete_button = MDIconButton(
+                icon="trash-can",
+                on_release=lambda x, s=session: self.confirm_delete_session(s),
+            )
+            item_layout.add_widget(delete_button)
+
+            self.list_view.add_widget(item_layout)
 
         campaign = self.session.query(Campaign).filter(Campaign.id == campaign_id)
 
         if campaign:
             self.title.text = campaign.first().name
+
+    def confirm_delete_session(self, session):
+        self.dialog = MDDialog(
+            MDDialogHeadlineText(
+                text=f"Are you sure you want to delete the session '{session.title}'?"
+            ),
+            MDDialogButtonContainer(
+                Widget(),
+                MDButton(
+                    MDButtonText(text="DELETE"),
+                    on_release=lambda x: self.delete_session(session),
+                ),
+                MDButton(
+                    MDButtonText(text="CANCEL"),
+                    on_release=lambda x: self.dismiss_dialog(),
+                ),
+                spacing=20,
+            ),
+        )
+        self.dialog.open()
+
+    def dismiss_dialog(self, *args):
+        """Zamyka dialog."""
+        if self.dialog:
+            self.dialog.dismiss()
+
+    def delete_session(self, ses):
+        """Usuwa sesję z bazy danych i aktualizuje widok."""
+        self.session.delete(ses)
+        self.session.commit()
+        self.dismiss_dialog()
+        self.on_enter()
+        self.dialog.clear_widgets()
 
     def open_session(self, session_id):
         print(f"Fetching session: {session_id}")

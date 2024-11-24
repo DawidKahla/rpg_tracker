@@ -3,6 +3,9 @@ from unittest.mock import MagicMock, patch
 from kivymd.app import MDApp
 from rpg_tracker.screens.calendar_screen import CalendarScreen
 from kivymd.uix.list import MDList
+from kivymd.uix.scrollview import MDScrollView
+from kivymd.uix.button import MDFabButton
+from kivymd.uix.boxlayout import MDBoxLayout
 
 
 class TestApp(MDApp):
@@ -27,18 +30,31 @@ class TestCalendarScreen(unittest.TestCase):
         self.assertIsNotNone(self.screen)
         self.assertEqual(self.screen.navigation, self.mock_navigation)
 
-    def test_build_ui(self):
-        nav_bar = self.screen.children[0].children[1]
-        self.assertEqual(
-            len(nav_bar.children),
-            3,
-            "Nav bar should have back button, add button and title",
-        )
-        self.assertEqual(
-            nav_bar.children[1].children[0].text,
-            "Campaign Title",
-            "Title should be 'Campaign Title'",
-        )
+    def test_build_ui_creates_correct_structure(self):
+        calendar_screen = CalendarScreen()
+        calendar_screen.build_ui()
+
+        root_layout = calendar_screen.children[0]
+        assert isinstance(root_layout, MDBoxLayout)
+
+        # Sprawdzenie elementów w głównym layout
+        assert len(root_layout.children) == 3  # FAB button, ScrollView, NavBar
+
+        # Sprawdzenie NavBar
+        nav_bar = root_layout.children[2]
+        assert isinstance(nav_bar, MDBoxLayout)
+        assert len(nav_bar.children) == 3
+
+        # Sprawdzenie FAB buttona
+        fab_button = root_layout.children[0]
+        assert isinstance(fab_button, MDFabButton)
+        assert fab_button.icon == "plus"
+
+        # Sprawdzenie ScrollView
+        scroll_view = root_layout.children[1]
+        assert isinstance(scroll_view, MDScrollView)
+        assert isinstance(scroll_view.children[0], MDList)
+        assert calendar_screen.list_view == scroll_view.children[0]
 
     def test_get_sessions_no_sessions(self):
         screen = CalendarScreen()
