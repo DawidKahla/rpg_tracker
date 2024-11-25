@@ -20,13 +20,11 @@ class CalendarScreen(MDScreen):
         self.menu_items = [
             {
                 "text": "Player Characters",
-                "on_release": lambda: self.switch_to_screen_from_menu("heroes_screen"),
+                # "on_release": lambda: self.switch_to_screen_from_menu("heroes_screen"),
             },
             {
                 "text": "Notes",
-                "on_release": lambda: self.switch_to_screen_from_menu(
-                    "campaign_notes_screen"
-                ),
+                # "on_release": lambda: self.switch_to_screen_from_menu("campaign_notes_screen"),
             },
         ]
         self.menu = MDDropdownMenu(items=self.menu_items)
@@ -87,7 +85,7 @@ class CalendarScreen(MDScreen):
 
         for session in sessions:
             item_layout = MDBoxLayout(
-                orientation="horizontal", size_hint_y=None, height=50
+                orientation="horizontal", size_hint_y=None, padding=8
             )
 
             text_layout = MDBoxLayout(orientation="vertical")

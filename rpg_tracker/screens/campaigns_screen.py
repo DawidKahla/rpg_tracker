@@ -5,7 +5,6 @@ from kivymd.uix.list import (
     MDListItemHeadlineText,
     MDListItemSupportingText,
     MDListItemLeadingIcon,
-    MDListItemTrailingIcon,
 )
 from kivymd.uix.scrollview import MDScrollView
 from rpg_tracker.database.db_setup import SessionLocal
@@ -31,7 +30,7 @@ class CampaignScreen(MDScreen):
         fab_button = MDFabButton(
             icon="plus",
             pos_hint={"center_x": 0.9, "center_y": 0.1},
-            # on_release=
+            on_release=self.add_campaign,
         )
         self.add_widget(fab_button)
 
@@ -50,20 +49,16 @@ class CampaignScreen(MDScreen):
                 MDListItemLeadingIcon(icon=campaign.icon),
                 MDListItemHeadlineText(
                     text=campaign.name,
-                    on_release=lambda x: self.open_calendar(campaign.id),
                 ),
                 MDListItemSupportingText(text=f"System: {campaign.system}"),
                 MDListItemSupportingText(text=f"Start: {campaign.start_date}"),
-                MDListItemTrailingIcon(
-                    icon="trash-can",
-                    on_release=lambda x: self.confirm_delete_campaign(campaign),
-                ),
+                on_release=lambda x, arg_id=campaign.id: self.open_calendar(arg_id),
             )
             item_layout.add_widget(item)
 
             delete_button = MDIconButton(
                 icon="trash-can",
-                on_release=lambda x: self.confirm_delete_campaign(campaign),
+                on_release=lambda x, c=campaign: self.confirm_delete_campaign(c),
             )
             item_layout.add_widget(delete_button)
 
@@ -79,6 +74,7 @@ class CampaignScreen(MDScreen):
     def delete_campaign(self, cam):
         self.session.delete(cam)
         self.session.commit()
+        self.dismiss_dialog()
         self.on_enter()
 
     def confirm_delete_campaign(self, campaign):
@@ -100,3 +96,10 @@ class CampaignScreen(MDScreen):
             ),
         )
         self.dialog.open()
+
+    def dismiss_dialog(self, *args):
+        if self.dialog:
+            self.dialog.dismiss()
+
+    def add_campaign(self, *args):
+        self.navigation.switch_to_screen("add_campaign_screen")
