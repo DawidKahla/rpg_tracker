@@ -5,6 +5,7 @@ from rpg_tracker.database.db_setup import init_db
 from rpg_tracker.navigation_manager import NavigationManager
 from rpg_tracker.screens.add_session_screen import AddSessionScreen
 from rpg_tracker.screens.add_campaign_screen import AddCampaignScreen
+from rpg_tracker.screens.hero_screen import HeroScreen
 
 
 class RPGTrackerApp(MDApp):
@@ -30,6 +31,9 @@ class RPGTrackerApp(MDApp):
             AddCampaignScreen(
                 name="add_campaign_screen", navigation=self.navigation_manager
             )
+        )
+        self.navigation_manager.add_widget(
+            HeroScreen(name="heroes_screen", navigation=self.navigation_manager)
         )
 
         return self.navigation_manager

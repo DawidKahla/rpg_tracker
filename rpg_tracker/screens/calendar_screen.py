@@ -20,7 +20,7 @@ class CalendarScreen(MDScreen):
         self.menu_items = [
             {
                 "text": "Player Characters",
-                # "on_release": lambda: self.switch_to_screen_from_menu("heroes_screen"),
+                "on_release": lambda: self.switch_to_screen_from_menu("heroes_screen"),
             },
             {
                 "text": "Notes",
